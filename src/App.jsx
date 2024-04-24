@@ -1,43 +1,45 @@
 import React, { useEffect, useState } from "react";
 import ImageCard from "./components/ImageCard/ImageCard";
-import axios from "axios";
+
 import Loader from "../src/components/Loader/Loader";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import SearchBar from "./components/SearchBar/SearchBar";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import { photoRequest } from "../src/api";
 
 const App = () => {
-  const [photos, setphotos] = useState(null);
+  const [photos, setPhotos] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isError, setIsError] = useState(false);
+  const [query, setQuery] = useState("");
+  console.log(query);
+  const onSearchQuery = (photoSearch) => {
+    setQuery(photoSearch);
+  };
   useEffect(() => {
     async function fetchPhoto() {
-      setIsLoading(true);
-      const { data } = await axios.get(
-        "https://api.unsplash.com/photos/?client_id=rtxS2o_3Pq5jhEZNKWgvQxcGcFMaWJGb1oZei-ws2CE"
-      );
-      console.log(data);
-      setphotos(data);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const data = await photoRequest();
+
+        setPhotos(data);
+      } catch (error) {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchPhoto();
   }, []);
 
   return (
     <>
-      <SearchBar />
+      <SearchBar onSearchQuery={onSearchQuery} />
+      {isLoading && <Loader />}
+      {isError && <ErrorMessage />}
       <div>
-        <hi>Images for you</hi>
-        {isLoading && <Loader />}
-        <ul>
-          {photos !== null &&
-            photos.map((photo) => {
-              return (
-                <li key={photo.id}>
-                  <img src={photo.urls.small} alt={photo.alt_description} />
-                </li>
-              );
-            })}
-        </ul>
+        <h1>Images for you</h1>
+        {photos && <ImageGallery photos={photos} />}
       </div>
     </>
   );

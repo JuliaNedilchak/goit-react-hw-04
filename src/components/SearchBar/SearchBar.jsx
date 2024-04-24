@@ -1,17 +1,28 @@
-import React from "react";
+import { Formik, Form, Field } from "formik";
+import { photoRequest } from "../../api";
+const FORM_INITIAL_VALUES = {
+  photoSearch: "",
+};
 
-const SearchBar = () => {
+const SearchBar = ({ onSearchQuery }) => {
+  const submitForm = (values) => {
+    onSearchQuery(values.photoSearch);
+  };
+
   return (
     <header>
-      <form>
-        <input
-          type="text"
-          autoComplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-        />
-        <button type="submit">Search</button>
-      </form>
+      <Formik initialValues={FORM_INITIAL_VALUES} onSubmit={submitForm}>
+        <Form>
+          <Field
+            type="text"
+            name="photoSearch"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+          />
+          <button type="submit">Search</button>
+        </Form>
+      </Formik>
     </header>
   );
 };
