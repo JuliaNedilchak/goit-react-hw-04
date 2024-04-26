@@ -5,17 +5,16 @@ import Loader from "../src/components/Loader/Loader";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import SearchBar from "./components/SearchBar/SearchBar";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
-import { photoRequest } from "../src/api";
+import { photoRequest, photoRequestSearch } from "../src/api";
 
 const App = () => {
   const [photos, setPhotos] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [query, setQuery] = useState("");
+
   console.log(query);
-  const onSearchQuery = (photoSearch) => {
-    setQuery(photoSearch);
-  };
+
   useEffect(() => {
     async function fetchPhoto() {
       try {
@@ -32,6 +31,26 @@ const App = () => {
     fetchPhoto();
   }, []);
 
+  useEffect(() => {
+    if (query.length === 0) return;
+    async function fetchPhotoSearch() {
+      try {
+        setIsLoading(true);
+        const data = await photoRequestSearch(query);
+
+        setPhotos(data);
+      } catch (error) {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchPhotoSearch();
+  }, [query]);
+
+  const onSearchQuery = (photoSearch) => {
+    setQuery(photoSearch);
+  };
   return (
     <>
       <SearchBar onSearchQuery={onSearchQuery} />

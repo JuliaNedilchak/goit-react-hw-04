@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from "formik";
-import { photoRequest } from "../../api";
+
 const FORM_INITIAL_VALUES = {
   photoSearch: "",
 };
