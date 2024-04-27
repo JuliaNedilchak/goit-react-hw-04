@@ -1,5 +1,4 @@
 import React from "react";
-import ImageCard from "../ImageCard/ImageCard";
 
 const ImageGallery = ({ photos }) => {
   return (
