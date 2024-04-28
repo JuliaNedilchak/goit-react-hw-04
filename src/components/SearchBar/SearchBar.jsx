@@ -1,4 +1,5 @@
 import { Formik, Form, Field } from "formik";
+import toast from "react-hot-toast";
 
 const FORM_INITIAL_VALUES = {
   photoSearch: "",
@@ -6,6 +7,10 @@ const FORM_INITIAL_VALUES = {
 
 const SearchBar = ({ onSearchQuery }) => {
   const submitForm = (values) => {
+    if (!values.photoSearch) {
+      toast.error("you cant submit an empty blank!");
+      return;
+    }
     onSearchQuery(values.photoSearch);
   };
 
@@ -18,7 +23,7 @@ const SearchBar = ({ onSearchQuery }) => {
             name="photoSearch"
             autoComplete="off"
             autoFocus
-            placeholder="Search images and photos"
+            placeholder="Search.."
           />
           <button type="submit">Search</button>
         </Form>

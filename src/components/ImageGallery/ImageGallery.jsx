@@ -1,8 +1,8 @@
 import React from "react";
-
-const ImageGallery = ({ photos }) => {
+import css from "./ImageGallery.module.css";
+const ImageGallery = ({ photos, openModal }) => {
   return (
-    <ul>
+    <ul className={css.imageSet}>
       {Array.isArray(photos) &&
         photos.map((photo) => {
           return (
@@ -12,6 +12,9 @@ const ImageGallery = ({ photos }) => {
                 height={200}
                 src={photo.urls.small}
                 alt={photo.alt_description}
+                onClick={() => {
+                  openModal(photo);
+                }}
               />
             </li>
           );
